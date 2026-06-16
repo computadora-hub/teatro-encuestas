@@ -270,6 +270,12 @@ export default function Dashboard() {
                       <input value={op} onChange={e => { const n=[...opciones]; n[i]=e.target.value; setOpciones(n) }}
                         placeholder={`Opción ${i+1}`}
                         className="flex-1 border border-gray-300 rounded-xl px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400" />
+                      <button type="button" disabled={i === 0} onClick={() => {
+                        const n = [...opciones]; [n[i-1], n[i]] = [n[i], n[i-1]]; setOpciones(n)
+                      }} className="text-gray-400 hover:text-purple-600 disabled:opacity-20 disabled:hover:text-gray-400 px-1">▲</button>
+                      <button type="button" disabled={i === opciones.length - 1} onClick={() => {
+                        const n = [...opciones]; [n[i+1], n[i]] = [n[i], n[i+1]]; setOpciones(n)
+                      }} className="text-gray-400 hover:text-purple-600 disabled:opacity-20 disabled:hover:text-gray-400 px-1">▼</button>
                     </div>
                   ))}
                   <button type="submit" disabled={guardandoOpciones}
