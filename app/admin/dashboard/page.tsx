@@ -42,6 +42,7 @@ export default function Dashboard() {
   const [totalVotos, setTotalVotos] = useState(0)
   const [totalCodigos, setTotalCodigos] = useState(0)
   const [cargandoResultados, setCargandoResultados] = useState(false)
+  const [eventoResultados, setEventoResultados] = useState<Evento | null>(null)
 
   useEffect(() => {
     const t = sessionStorage.getItem('adminToken')
@@ -113,10 +114,12 @@ export default function Dashboard() {
     if (fileRef.current) fileRef.current.value = ''
   }
 
-  async function verResultados() {
-    if (!eventoActivo) return
+  async function verResultados(evento?: Evento) {
+    const ev = evento || eventoActivo
+    if (!ev) return
+    setEventoResultados(ev)
     setCargandoResultados(true)
-    const res = await fetch(`/api/admin/resultados?eventoId=${eventoActivo.id}`, {
+    const res = await fetch(`/api/admin/resultados?eventoId=${ev.id}`, {
       headers: { 'x-admin-token': token },
     })
     const data = await res.json()
@@ -233,11 +236,17 @@ export default function Dashboard() {
                   <h3 className="text-sm font-semibold text-gray-500 mb-2">Eventos anteriores</h3>
                   <div className="space-y-2">
                     {eventos.map(ev => (
-                      <div key={ev.id} className="flex items-center justify-between text-sm border border-gray-100 rounded-lg px-3 py-2">
-                        <span className="text-gray-700">{ev.titulo}</span>
-                        <span className={`text-xs px-2 py-0.5 rounded-full ${ev.activo ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
-                          {ev.activo ? 'Activo' : 'Cerrado'}
-                        </span>
+                      <div key={ev.id} className="flex items-center justify-between text-sm border border-gray-100 rounded-lg px-3 py-2 gap-2">
+                        <span className="text-gray-700 truncate">{ev.titulo}</span>
+                        <div className="flex items-center gap-2 flex-shrink-0">
+                          <span className={`text-xs px-2 py-0.5 rounded-full ${ev.activo ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
+                            {ev.activo ? 'Activo' : 'Cerrado'}
+                          </span>
+                          <button onClick={() => verResultados(ev)}
+                            className="text-xs text-purple-600 underline hover:no-underline whitespace-nowrap">
+                            Ver resultados
+                          </button>
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -302,13 +311,13 @@ export default function Dashboard() {
           {/* TAB RESULTADOS */}
           {tab === 'resultados' && (
             <div>
-              {!eventoActivo ? (
-                <p className="text-gray-400 text-center py-8">No hay evento activo</p>
+              {!eventoResultados ? (
+                <p className="text-gray-400 text-center py-8">Elegí un evento en la pestaña Evento</p>
               ) : cargandoResultados ? (
                 <p className="text-gray-400 text-center py-8">Cargando...</p>
               ) : (
                 <div className="space-y-4">
-                  <h2 className="font-semibold text-gray-700">Resultados: <span className="text-purple-700">{eventoActivo.titulo}</span></h2>
+                  <h2 className="font-semibold text-gray-700">Resultados: <span className="text-purple-700">{eventoResultados.titulo}</span></h2>
                   <div className="flex gap-4 text-center">
                     <div className="flex-1 bg-purple-50 rounded-xl p-3">
                       <p className="text-2xl font-bold text-purple-700">{totalVotos}</p>
@@ -361,7 +370,7 @@ export default function Dashboard() {
                     </div>
                   )}
 
-                  <button onClick={verResultados} className="w-full text-sm text-purple-600 border border-purple-200 rounded-xl py-2 hover:bg-purple-50 transition">
+                  <button onClick={() => verResultados(eventoResultados)} className="w-full text-sm text-purple-600 border border-purple-200 rounded-xl py-2 hover:bg-purple-50 transition">
                     🔄 Actualizar resultados
                   </button>
                 </div>
