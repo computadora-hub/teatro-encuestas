@@ -56,7 +56,7 @@ export default function ImprimirPage() {
 
           {/* Título */}
           <div style={{ textAlign: 'center' }}>
-            <p style={{ fontSize: '13px', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '6px' }}>
+            <p style={{ fontSize: '22px', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.15em', fontWeight: '700', marginBottom: '6px' }}>
               Votación
             </p>
             <h1 style={{ fontSize: '32px', fontWeight: '800', color: '#1f2937', lineHeight: 1.2 }}>
@@ -76,7 +76,7 @@ export default function ImprimirPage() {
             padding: '20px',
             background: 'white',
           }}>
-            {url && <QRCodeSVG value={url} size={440} level="H" />}
+            {url && <QRCodeSVG value={url} size={352} level="H" />}
           </div>
 
           {/* Instrucciones */}
