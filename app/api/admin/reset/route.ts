@@ -13,11 +13,8 @@ export async function POST(req: NextRequest) {
   // Borrar todos los votos del evento
   await supabaseAdmin.from('enc_votos').delete().eq('evento_id', eventoId)
 
-  // Liberar todos los códigos (marcar como no usados)
-  await supabaseAdmin
-    .from('enc_codigos')
-    .update({ usado: false, usado_at: null })
-    .eq('evento_id', eventoId)
+  // Borrar todos los códigos del evento
+  await supabaseAdmin.from('enc_codigos').delete().eq('evento_id', eventoId)
 
   return NextResponse.json({ ok: true })
 }
