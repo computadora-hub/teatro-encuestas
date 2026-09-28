@@ -105,8 +105,8 @@ export default function ImprimirPage() {
             <p style={{ fontSize: '12px', color: '#9ca3af', marginBottom: '4px' }}>
               O ingresá manualmente a:
             </p>
-            <p style={{ fontSize: '14px', fontWeight: '600', color: '#7c3aed', fontFamily: 'monospace' }}>
-              {url}
+            <p style={{ fontSize: '20px', fontWeight: '800', color: '#7c3aed', letterSpacing: '0.05em' }}>
+              T1.AR/VOTO
             </p>
           </div>
         </div>
