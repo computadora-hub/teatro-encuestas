@@ -140,6 +140,27 @@ export default function Dashboard() {
     await cargarEventos(token)
   }
 
+  async function reactivarEvento(ev: Evento) {
+    await fetch('/api/admin/evento', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', 'x-admin-token': token },
+      body: JSON.stringify({ id: ev.id, activo: true }),
+    })
+    await cargarEventos(token)
+  }
+
+  async function ponerEnCero(ev: Evento) {
+    const confirmar = window.confirm(`¿Seguro que querés borrar TODOS los votos de "${ev.titulo}"? Esta acción no se puede deshacer.`)
+    if (!confirmar) return
+    await fetch('/api/admin/reset', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-admin-token': token },
+      body: JSON.stringify({ eventoId: ev.id }),
+    })
+    await cargarEventos(token)
+    alert('✅ Votos borrados y códigos liberados.')
+  }
+
   const codigosTotal = eventoActivo?.enc_codigos?.length || 0
   const codigosUsados = eventoActivo?.enc_codigos?.filter(c => c.usado).length || 0
 
@@ -161,13 +182,17 @@ export default function Dashboard() {
                 {codigosTotal} códigos · {codigosUsados} votos recibidos · {eventoActivo.enc_opciones?.length || 0} opciones
               </p>
             </div>
-            <div className="flex gap-2 items-center">
+            <div className="flex gap-2 items-center flex-wrap justify-end">
               <span className={`text-xs px-2 py-1 rounded-full font-medium ${eventoActivo.activo ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-500'}`}>
                 {eventoActivo.activo ? 'Activo' : 'Cerrado'}
               </span>
               <button onClick={toggleActivo}
                 className="text-xs text-purple-600 underline hover:no-underline">
                 {eventoActivo.activo ? 'Cerrar' : 'Abrir'}
+              </button>
+              <button onClick={() => ponerEnCero(eventoActivo)}
+                className="text-xs text-red-500 underline hover:no-underline">
+                Poner en cero
               </button>
             </div>
           </div>
@@ -238,13 +263,23 @@ export default function Dashboard() {
                     {eventos.map(ev => (
                       <div key={ev.id} className="flex items-center justify-between text-sm border border-gray-100 rounded-lg px-3 py-2 gap-2">
                         <span className="text-gray-700 truncate">{ev.titulo}</span>
-                        <div className="flex items-center gap-2 flex-shrink-0">
+                        <div className="flex items-center gap-2 flex-shrink-0 flex-wrap justify-end">
                           <span className={`text-xs px-2 py-0.5 rounded-full ${ev.activo ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
                             {ev.activo ? 'Activo' : 'Cerrado'}
                           </span>
+                          {!ev.activo && (
+                            <button onClick={() => reactivarEvento(ev)}
+                              className="text-xs text-green-600 underline hover:no-underline whitespace-nowrap">
+                              Reactivar
+                            </button>
+                          )}
                           <button onClick={() => verResultados(ev)}
                             className="text-xs text-purple-600 underline hover:no-underline whitespace-nowrap">
-                            Ver resultados
+                            Resultados
+                          </button>
+                          <button onClick={() => ponerEnCero(ev)}
+                            className="text-xs text-red-400 underline hover:no-underline whitespace-nowrap">
+                            En cero
                           </button>
                         </div>
                       </div>

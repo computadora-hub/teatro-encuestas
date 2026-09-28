@@ -32,6 +32,10 @@ export async function POST(req: NextRequest) {
 export async function PATCH(req: NextRequest) {
   if (!checkAdmin(req)) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
   const { id, activo } = await req.json()
+  // Si se reactiva, cerrar los demás primero
+  if (activo) {
+    await supabaseAdmin.from('enc_eventos').update({ activo: false }).neq('id', id)
+  }
   const { data, error } = await supabaseAdmin
     .from('enc_eventos')
     .update({ activo })
