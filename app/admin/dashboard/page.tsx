@@ -243,6 +243,18 @@ export default function Dashboard() {
                 Copiar link
               </button>
             </div>
+            <div className="border-t border-gray-100 pt-2 flex items-center justify-between gap-2">
+              <div>
+                <p className="text-xs font-medium text-gray-700">🖨️ Afiche para imprimir</p>
+                <p className="text-xs text-gray-400">A4 con QR para pegar en la sala</p>
+              </div>
+              <a
+                href={`/imprimir/${eventoActivo.id}`}
+                target="_blank"
+                className="text-xs bg-green-100 text-green-700 px-3 py-1.5 rounded-lg hover:bg-green-200 transition font-medium whitespace-nowrap">
+                Ver e imprimir
+              </a>
+            </div>
           </div>
         )}
 
