@@ -43,27 +43,27 @@ export default function ImprimirPage() {
           style={{
             width: '210mm',
             minHeight: '297mm',
-            padding: '20mm',
+            padding: '14mm 20mm',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: '24px',
+            gap: '16px',
           }}
         >
           {/* Ícono */}
-          <div style={{ fontSize: '64px', lineHeight: 1 }}>🎭</div>
+          <div style={{ fontSize: '48px', lineHeight: 1 }}>🎭</div>
 
           {/* Título */}
           <div style={{ textAlign: 'center' }}>
-            <p style={{ fontSize: '14px', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '8px' }}>
+            <p style={{ fontSize: '13px', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '6px' }}>
               Votación
             </p>
-            <h1 style={{ fontSize: '36px', fontWeight: '800', color: '#1f2937', lineHeight: 1.2 }}>
+            <h1 style={{ fontSize: '32px', fontWeight: '800', color: '#1f2937', lineHeight: 1.2 }}>
               {evento.titulo}
             </h1>
             {evento.descripcion && (
-              <p style={{ fontSize: '16px', color: '#6b7280', marginTop: '8px' }}>
+              <p style={{ fontSize: '15px', color: '#6b7280', marginTop: '6px' }}>
                 {evento.descripcion}
               </p>
             )}
@@ -71,26 +71,26 @@ export default function ImprimirPage() {
 
           {/* QR */}
           <div style={{
-            border: '3px solid #7c3aed',
-            borderRadius: '16px',
-            padding: '24px',
+            border: '4px solid #7c3aed',
+            borderRadius: '20px',
+            padding: '20px',
             background: 'white',
           }}>
-            {url && <QRCodeSVG value={url} size={220} level="H" />}
+            {url && <QRCodeSVG value={url} size={440} level="H" />}
           </div>
 
           {/* Instrucciones */}
-          <div style={{ textAlign: 'center', maxWidth: '400px' }}>
-            <p style={{ fontSize: '20px', fontWeight: '700', color: '#374151', marginBottom: '12px' }}>
+          <div style={{ textAlign: 'center', maxWidth: '480px' }}>
+            <p style={{ fontSize: '18px', fontWeight: '700', color: '#374151', marginBottom: '8px' }}>
               ¿Cómo votar?
             </p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
               {[
                 '1. Escaneá el código QR con tu celular',
                 '2. Ingresá el código que recibiste',
                 '3. Elegí tu obra favorita y confirmá',
               ].map((paso, i) => (
-                <p key={i} style={{ fontSize: '16px', color: '#4b5563' }}>{paso}</p>
+                <p key={i} style={{ fontSize: '15px', color: '#4b5563' }}>{paso}</p>
               ))}
             </div>
           </div>
@@ -99,13 +99,13 @@ export default function ImprimirPage() {
           <div style={{
             background: '#f3f4f6',
             borderRadius: '12px',
-            padding: '12px 24px',
+            padding: '10px 28px',
             textAlign: 'center',
           }}>
-            <p style={{ fontSize: '12px', color: '#9ca3af', marginBottom: '4px' }}>
+            <p style={{ fontSize: '11px', color: '#9ca3af', marginBottom: '3px' }}>
               O ingresá manualmente a:
             </p>
-            <p style={{ fontSize: '20px', fontWeight: '800', color: '#7c3aed', letterSpacing: '0.05em' }}>
+            <p style={{ fontSize: '22px', fontWeight: '800', color: '#7c3aed', letterSpacing: '0.05em' }}>
               T1.AR/VOTO
             </p>
           </div>
