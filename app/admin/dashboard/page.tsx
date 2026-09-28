@@ -36,6 +36,8 @@ export default function Dashboard() {
   const fileRef = useRef<HTMLInputElement>(null)
   const [cargandoCodigos, setCargandoCodigos] = useState(false)
   const [msgCodigos, setMsgCodigos] = useState('')
+  const [codigoManual, setCodigoManual] = useState('')
+  const [agregandoManual, setAgregandoManual] = useState(false)
 
   // Resultados
   const [resultados, setResultados] = useState<Resultado[]>([])
@@ -112,6 +114,23 @@ export default function Dashboard() {
     setMsgCodigos(res.ok ? `✅ ${data.cargados} códigos cargados` : `❌ ${data.error}`)
     setCargandoCodigos(false)
     if (fileRef.current) fileRef.current.value = ''
+  }
+
+  async function agregarCodigoManual(e: React.FormEvent) {
+    e.preventDefault()
+    if (!eventoActivo || !codigoManual.trim()) return
+    setAgregandoManual(true)
+    setMsgCodigos('')
+    const res = await fetch('/api/admin/codigos', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-admin-token': token },
+      body: JSON.stringify({ eventoId: eventoActivo.id, codigos: [codigoManual.trim()] }),
+    })
+    const data = await res.json()
+    await cargarEventos(token)
+    setMsgCodigos(res.ok ? `✅ Código "${codigoManual.trim().toUpperCase()}" agregado` : `❌ ${data.error}`)
+    setCodigoManual('')
+    setAgregandoManual(false)
   }
 
   async function verResultados(evento?: Evento) {
@@ -335,8 +354,23 @@ export default function Dashboard() {
                     <p className="text-sm text-gray-500">códigos cargados</p>
                     <p className="text-xs text-gray-400 mt-1">{codigosUsados} usados · {codigosTotal - codigosUsados} disponibles</p>
                   </div>
+                  {/* Agregar código a mano */}
+                  <form onSubmit={agregarCodigoManual} className="flex gap-2">
+                    <input
+                      value={codigoManual}
+                      onChange={e => setCodigoManual(e.target.value.toUpperCase())}
+                      placeholder="Escribí un código"
+                      className="flex-1 border border-gray-300 rounded-xl px-3 py-2 text-sm text-gray-900 placeholder-gray-400 font-mono focus:outline-none focus:ring-2 focus:ring-purple-400"
+                    />
+                    <button type="submit" disabled={agregandoManual || !codigoManual.trim()}
+                      className="bg-purple-600 hover:bg-purple-700 text-white text-sm font-semibold px-4 rounded-xl transition disabled:opacity-50">
+                      {agregandoManual ? '...' : 'Agregar'}
+                    </button>
+                  </form>
+
+                  {/* Subir archivo */}
                   <div>
-                    <p className="text-sm text-gray-600 mb-2">Subí un archivo <strong>.txt</strong> o <strong>.csv</strong> con un código por línea:</p>
+                    <p className="text-sm text-gray-600 mb-2">O subí un archivo <strong>.txt</strong> o <strong>.csv</strong> con un código por línea:</p>
                     <label className={`flex flex-col items-center justify-center border-2 border-dashed rounded-xl p-6 cursor-pointer transition ${cargandoCodigos ? 'border-gray-200 bg-gray-50' : 'border-purple-300 hover:bg-purple-50'}`}>
                       <span className="text-2xl mb-2">📄</span>
                       <span className="text-sm text-gray-500">{cargandoCodigos ? 'Cargando...' : 'Hacer click para seleccionar archivo'}</span>
