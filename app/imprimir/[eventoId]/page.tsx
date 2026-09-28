@@ -105,7 +105,7 @@ export default function ImprimirPage() {
             <p style={{ fontSize: '11px', color: '#9ca3af', marginBottom: '3px' }}>
               O ingresá manualmente a:
             </p>
-            <p style={{ fontSize: '22px', fontWeight: '800', color: '#7c3aed', letterSpacing: '0.05em' }}>
+            <p style={{ fontSize: '38px', fontWeight: '800', color: '#7c3aed', letterSpacing: '0.05em' }}>
               T1.AR/VOTO
             </p>
           </div>
