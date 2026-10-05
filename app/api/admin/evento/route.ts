@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
   if (!checkAdmin(req)) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
   const { data } = await supabaseAdmin
     .from('enc_eventos')
-    .select('*, enc_opciones(id, texto, orden), enc_codigos(id, usado)')
+    .select('*, enc_opciones(id, texto, orden), enc_codigos(id, codigo, usado)')
     .order('created_at', { ascending: false })
   return NextResponse.json(data)
 }

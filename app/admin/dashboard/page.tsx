@@ -9,7 +9,7 @@ type Evento = {
   descripcion: string
   activo: boolean
   enc_opciones: { id: string; texto: string; orden: number }[]
-  enc_codigos: { id: string; usado: boolean }[]
+  enc_codigos: { id: string; codigo: string; usado: boolean }[]
 }
 type Resultado = { id: string; texto: string; votos: number }
 
@@ -366,6 +366,24 @@ export default function Dashboard() {
                     <p className="text-sm text-gray-500">códigos cargados</p>
                     <p className="text-xs text-gray-400 mt-1">{codigosUsados} usados · {codigosTotal - codigosUsados} disponibles</p>
                   </div>
+
+                  {/* Lista de códigos usados */}
+                  {codigosUsados > 0 && (
+                    <div>
+                      <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Ya votaron</p>
+                      <div className="bg-gray-50 rounded-xl p-3 max-h-48 overflow-y-auto">
+                        <div className="flex flex-wrap gap-2">
+                          {eventoActivo.enc_codigos
+                            .filter(c => c.usado)
+                            .map(c => (
+                              <span key={c.id} className="text-xs font-mono bg-purple-100 text-purple-700 px-2 py-1 rounded-lg">
+                                {c.codigo}
+                              </span>
+                            ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
                   {/* Agregar código a mano */}
                   <form onSubmit={agregarCodigoManual} className="flex gap-2">
                     <input
